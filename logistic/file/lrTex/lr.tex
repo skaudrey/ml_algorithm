@@ -164,6 +164,9 @@ L\big(\theta\big)=\ln L\big(\theta\big)=\sum_{i=1}^{m} y_i\ln {h_\theta\big(x_i\
 3.返回回归系数$\theta$
 
 \end{tabular}
+\\
+\\
+Note:程序实现中gradient ascent和gradient descent都是可以的，全看损失函数怎么写。如果计算的是$h\big(x\big)-y$，那么用gradient descent；反之如果计算的是$y-h\big(x\big)$，那么用gradient ascent。
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------

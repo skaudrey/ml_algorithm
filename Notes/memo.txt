@@ -1,0 +1,6 @@
+1. 2018.4.4. 修改logistic.pdf中的梯度更新公式，解决不同文件夹下的py文件调用问题。
+
+通过在项目根目录加__init__.py,在此文件中sys.path.add(os.getcwd()+'/util');
+同时在util文件夹下添加空的__init__.py文件
+
+logistic本来是求最大用梯度上升，Andrew取了负数用了梯度下降

@@ -70,10 +70,10 @@ class InfGain:
 
 
 
-if __name__=='__main__':
-    sns.set()
-    P = np.arange(0.0,1.0,0.01)
-    inf = InfGain(P)
-    inf.plot_information_gain()
-    print('Done')
+# if __name__=='__main__':
+#     sns.set()
+#     P = np.arange(0.0,1.0,0.01)
+#     inf = InfGain(P)
+#     inf.plot_information_gain()
+#     print('Done')
 

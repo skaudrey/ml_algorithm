@@ -1,6 +1,9 @@
 __author__ = 'MiaFeng'
 import numpy as np
 from sklearn.datasets import make_moons  #test datasets
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 class Logistic:
     def __init__(self):
         self.dim = 2
@@ -19,13 +22,14 @@ class Logistic:
         while itr<= 100:
             fx = np.dot(self.w,x.T)+self.b
             hx = self.sigmoid(fx)
-            t = hx-y
+            t = y - hx
+            # if you write t = hx - y; then you have to run gradient descent
             s = [[i[0]*i[1][0], i[0]*i[1][1]] for i in zip(t,x)]
             # two dimension,each dimension requires a calculation of
             gradien_w = np.sum(s,0)/pts_size
             gradien_b = np.sum(t,0)/pts_size
-            self.w -= gradien_w * self.eta
-            self.b -= gradien_b * self.eta
+            self.w += gradien_w * self.eta
+            self.b += gradien_b * self.eta
 
             ypts = (lr.w[0] * xpts + lr.b) / (-lr.w[1])
             # dont't know why at first,well, need an explanation
@@ -65,11 +69,9 @@ class Logistic:
         plt.savefig('fig/p_N%s_itr%s' % (str(data_size),str(itr)),dpi=200,bbox_inches='tight')
 
 if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
+    import os,sys
+    # sys.path.append()
     sns.set()
-
     data_size = 250
     noise_level = 0.25
     x,y = make_moons(data_size,noise=noise_level)
@@ -78,10 +80,10 @@ if __name__ == '__main__':
     lr.logistic_regression(x,y,eta=1.2)
 
     # make gif
-    from util.gif_util import GifUtil
-    import os,sys
+
+    from util.gif_util import makeGif
     path = os.getcwd()
     figPath = path+'/fig'
-    print(figPath)
     figName = 'decision.gif'
-    gifUtil = GifUtil.makeGif(figDir=figPath,figName=figName,method=2)
+    print(figPath)
+    makeGif(figDir=figPath, figName=figName, method=1)

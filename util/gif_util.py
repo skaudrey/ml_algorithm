@@ -2,23 +2,17 @@ __author__ = 'MiaFeng'
 import os, sys
 import imageio
 from PIL import Image
-class GifUtil(object):
 
-    # def __init__(self):
-    #     self.__imageio__ = 1
-    #     self.__PIL__ = 2
-    #     print("using imageio method,please choose 1\n using PIL method, please choose 2")
+def makeGif(figDir,figName,method=1):
+    __imageio = 1
+    __PIL = 2
 
-    @classmethod
-    def makeGif(cls,figDir,figName,method=1):
-        __imageio = 1
-        __PIL = 2
+    images = []
 
-        images = []
-        filenames = sorted(fn for fn in os.listdir(figDir) if fn.endswith('.png'))
-        if method==__imageio:
-            for filename in filenames:
-                images.append(imageio.imread(figDir +'/'+ filename))
+    filenames = sorted(fn for fn in os.listdir(figDir) if fn.endswith('.png'))
+    if method==__imageio:
+        for filename in filenames:
+            images.append(imageio.imread(figDir +'/'+ filename))
             print('start')
             imageio.mimsave(figDir+'/'+figName, images, duration=0.5, loop=1)  # duration 每帧间隔时间，loop 循环次数
             print('Done')
