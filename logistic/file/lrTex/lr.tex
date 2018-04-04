@@ -140,7 +140,7 @@ L\big(\theta\big)=\ln L\big(\theta\big)=\sum_{i=1}^{m} y_i\ln {h_\theta\big(x_i\
 
 梯度更新公式：
 \begin{equation}
-\theta_j^{t+1}=\theta_j^t-\alpha\frac{\partial}{\partial \theta_j}L\big(\theta_j\big)=\theta_j^t-\alpha\frac{1}{m}\sum_{i=1}^{m}\big(h_\theta\big(x_i\big)-y_i\big)x_{ij}
+\theta_j^{t+1}=\theta_j^t+\alpha\frac{\partial}{\partial \theta_j}L\big(\theta_j\big)=\theta_j^t+\alpha\frac{1}{m}\sum_{i=1}^{m}\big(h_\theta\big(x_i\big)-y_i\big)x_{ij}
 \end{equation}
 
 %\item[Atomic mass]
