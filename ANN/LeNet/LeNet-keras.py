@@ -33,3 +33,7 @@ class CreateLeNet(object):
         model = Sequential([conv_layers,fc_layers])
 
         return model
+
+# parameters
+VERBOSE = 1
+IMG_ROW,IMG_COL = 28,28
