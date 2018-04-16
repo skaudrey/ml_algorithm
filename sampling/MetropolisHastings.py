@@ -55,3 +55,4 @@ if __name__=="__main__":
     # 采样数据集的频率分布直方图，可以看到还是很接近概率密度值的
     plt.show()
 
+import pickle
