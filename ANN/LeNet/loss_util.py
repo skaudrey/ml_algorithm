@@ -8,7 +8,39 @@
 __author__ = 'MiaFeng'
 
 from keras.callbacks import Callback
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 class LossOfKeras(Callback):
     def on_epoch_begin(self, epoch, logs={}):
-        self.acc = [{'epoch',},{'batch',}]
+        self.acc = {'epoch':[],'batch':[]}
+        self.loss = {'epoch': [], 'batch': []}
+        self.val_loss = {'epoch': [], 'batch': []}
+        self.val_acc = {'epoch': [], 'batch': []}
+
+    # get loss after each batch
+    def on_batch_end(self, batch, logs={}):
+        self.loss['batch'].append(logs.get('loss'))
+        self.acc['batch'].append(logs.get('acc'))
+        self.val_acc['batch'].append(logs.get('val_acc'))
+        self.val_loss['batch'].append(logs.get('val_loss'))
+
+    def on_epoch_end(self, epoch, logs={}):
+        self.loss['epoch'].append(logs.get('loss'))
+        self.acc['epoch'].append(logs.get('acc'))
+        self.val_loss['epoch'].append(logs.get('val_loss'))
+        self.val_acc['epoch'].append(logs.get('val_acc'))
+
+    def loss_plot(self,loss_type):
+        '''
+
+        :param loss_type: 'epoch' for ploting the loss after each epoch; 'batch' for plotting the loss after each batch
+        :return:
+        '''
+
+        sns.set()
+
+        iters = range(len(self.loss[loss_type]))
+
+        plt.figure()
+
