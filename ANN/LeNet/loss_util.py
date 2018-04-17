@@ -44,3 +44,18 @@ class LossOfKeras(Callback):
 
         plt.figure()
 
+        # acc
+        plt.plot(iters,self.acc[loss_type],'r',label='train acc')
+        # loss
+        plt.plot(iters,self.loss[loss_type],'g',label='train loss')
+
+        if loss_type=='epoch':
+            # val_loss
+            plt.plot(iters,self.val_loss[loss_type],'b',label='val loss')
+            # val_acc
+            plt.plot(iters,self.val_acc[loss_type],'k',label='val acc')
+
+        plt.xlabel(loss_type)
+        plt.ylabel('acc-loss')
+        plt.legend(loc='upper right')
+        plt.show()
