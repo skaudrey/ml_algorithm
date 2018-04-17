@@ -14,7 +14,7 @@ from keras.layers.core import Dense,Activation,Flatten
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.utils import np_utils    # change to one hot
-
+from keras import backend as K
 class CreateLeNet(object):
     def createLeNet(self,input_shape,nb_class):
 
@@ -48,3 +48,21 @@ NB_EPOCH = 20
 
 # load mnist dataset
 (X_train, Y_train),(X_test, Y_test) = mnist.load_data()
+K.set_image_dim_ordering('tf')  # channel last
+
+# normalizing dataset
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+X_train /= 255
+X_test /= 255
+X_train = X_train.reshape(X_train.shape[0],IMG_ROW,IMG_COL,1)
+X_test = X_test.reshape(X_test.shape[0],IMG_ROW,IMG_COL,1)
+
+print(X_train.shape[0],'train samples')
+print(X_test.shape[0],'test samples')
+
+# convert class vectors to binary class matrices
+Y_train = np_utils.to_categorical(Y_train,NB_CLASS)
+Y_test =  np_utils.to_categorical(Y_test,NB_CLASS)
+
+
