@@ -32,14 +32,16 @@ Some bugs still need to be fixed.
 5.  Result: /EM-GMM/file/gmmTex/gmm.pdf.
 
 ## Perceptron
-perceptron.pdf
 1.  Code: /perceptron/perceptron.py
 2.  The file of derivation: /perceptronfile/percepTex/perceptron.pdf
 3.  Test data: /svm/flowers.csv
 4.  Details: Minimization #(samples which are classified incorrectly),SGD
 5.  Result: /perceptronfile/percepTex/perceptron.pdf
 
-# Code Structure
+# Content: Some simulation of basic statistical ideas
+## Sampling: MCMC
+1.  Code: /sampling/MetropolisHastings.py, /sampling/Gibbs.py
+2.  The file of concept: /sampling/MCMC concept.pdf
 
 # Reference
 1.  李航。统计学习方法
