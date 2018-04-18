@@ -15,6 +15,10 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.utils import np_utils    # change to one hot
 from keras import backend as K
+from keras.utils.vis_utils import plot_model
+
+from ANN.LeNet.loss_util import LossOfKeras
+
 class CreateLeNet(object):
     def createLeNet(self,input_shape,nb_class):
 
@@ -65,4 +69,30 @@ print(X_test.shape[0],'test samples')
 Y_train = np_utils.to_categorical(Y_train,NB_CLASS)
 Y_test =  np_utils.to_categorical(Y_test,NB_CLASS)
 
+# init the optimizer and model
+model = CreateLeNet.createLeNet(input_shape=INPUT_SHAPE, nb_class=NB_CLASS)
+model.summary()
 
+model.compile(loss='categorical_crossentropy', optimizer=OPTIMIZER, metrics=['accuracy'])
+
+hist = LossOfKeras()
+model.fit(X_train,Y_train,batch_size=BATCH_SIZE,epochs=NB_EPOCH,verbose=VERBOSE,
+          validation_split=VALIDATION_SPLIT,callbacks=[hist])
+
+# plot accuracy-loss
+hist.loss_plot('epoch')
+hist.loss_plot('batch')
+
+# save history of the loss in each batch
+with open('loss_log.txt','w') as f:
+    f.write(str(hist.loss)+str(hist.acc)+str(hist.val_acc)+str(hist.val_loss))
+
+score = model.evaluate(X_test,Y_test,verbose=VERBOSE)
+
+print("Test score:", score[0])
+print("Test accuracy:", score[1])
+
+model.save('mymodel.h5')
+
+plot_model(model,to_file='model.png',show_shapes=True,show_layer_names=True) # you have to install Graphviz.msi
+# change the path of Method3 in __init__.py of pydot_ng if it is necessary (if you don't install the Graphviz in deafault path)

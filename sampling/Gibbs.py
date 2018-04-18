@@ -84,3 +84,5 @@ if __name__=="__main__":
     ax = Axes3D(fig, rect=[0,0,1,1],elev=30, azim=20)
     ax.scatter(x_res,y_res,z_res,marker='o')
     plt.show()
+
+
