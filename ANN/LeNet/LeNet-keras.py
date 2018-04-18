@@ -95,4 +95,4 @@ print("Test accuracy:", score[1])
 model.save('mymodel.h5')
 
 plot_model(model,to_file='model.png',show_shapes=True,show_layer_names=True) # you have to install Graphviz.msi
-# change the path of Method3 in __init__.py of pydot_ng if it is necessary (if you don't install the Graphviz in deafault path)
+# change the path for Method 3 in __init__.py of pydot_ng if it is necessary (if you don't install the Graphviz in deafault path)
