@@ -67,7 +67,7 @@ class NaiveBayes:
         numWords = len(trainMatrix[0])  # #features, which is the length of vocabulary dict theoretically
         pNeg = sum(trainLabel)/float(numTrainDocs)  # the probability of negative samples
 
-        pONum = np.ones(numWords)   # initialize the number of samples as 1 to avoiding the denomitor is zero
+        p0Num = np.ones(numWords)   # initialize the number of samples as 1 to avoiding the denomitor is zero
         p1Num = np.ones(numWords)   # the same target
 
         p0InAll = 2.0   # the number of labels,which is used for laplace smoother
@@ -79,9 +79,25 @@ class NaiveBayes:
                 p1Num += trainMatrix[i]
                 p1InAll += sum(trainMatrix[i])
             else:
-                pONum += trainMatrix[i]
+                p0Num += trainMatrix[i]
                 p0InAll += sum(trainMatrix[i])
         print(p1InAll)
 
         # log for avoiding underflow
+        p0Vect = np.log(p0Num/p0InAll)
+        p1Vect = np.log(p1Num/p1InAll)
+        return p0Vect,p1Vect,pNeg
+
+    def _classifyNB(self,vecSample, p0Vec, p1Vec, pNeg):
+        '''
+        prediction
+        :param vecSample:
+        :param p0Vec:
+        :param p1Vec:
+        :param pNeg:
+        :return:
+        '''
+
+        prob_y0 = sum(vecSample * p0Vec) + np.log(1-pNeg)
+
 
