@@ -125,7 +125,13 @@ P\big(Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)}{n},k=1,2,\cdots,
 P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_k\big)}{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)}
 \end{equation}
 其中，$i=1,2,\cdots,n$,$l=1,2,\cdots,s$,$k=1,2,\cdots,m$
+
+\item[改进]
+为了避免分母为0，进行了拉普拉斯平滑，即在分母上加了类数目。
+
 \end{description}
+
+
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
