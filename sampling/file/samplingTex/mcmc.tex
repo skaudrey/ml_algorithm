@@ -96,13 +96,14 @@
 MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。用于采样，数值积分等等。
 %To determine the atomic weight of magnesium via its reaction with oxygen and to study the stoichiometry of the reaction (as defined in \ref{definitions}):
 
-求解目标：用多次采样得到的频率分布近似原概率分布。
+求解目标：用多次采样得到的频率分布近似原概率分布。即本来对复杂的$f\left(x\right)$做积分，但是因为$f\left(x\right)$比较复杂所以显式积分困难。迂回方法是构造统计量$\frac{f\left(x\right)}{p\left(x\right)}$，通过对$x\sim p\left(x\right)$进行采样，求取统计量$\frac{f\left(x\right)}{p\left(x\right)}$的期望得到数值积分值。
 \begin{equation}
-
+\theta = \int_{a}^{b}f\left(x\right)\,dx=\int_{a}^{b}\frac{f\left(x\right)}{p\left(x\right)}p\left(x\right)\approx \frac{1}{n}\sum\limits_{i=0}^{n-1}\frac{f\left(x_i\right)}{p\left(x_i\right)}
 \end{equation}
 
-求解思路：微积分思想（recall：学习微积分的时候，用无数个划分的小矩形的面积来近似面积，但是此时小矩形是来自均匀分布的）。实际上，来自均匀分布的可能性很小，此时需要
-求解方法：Markov Chain，蒙特卡洛积分。
+求解思路：微积分思想（recall：学习微积分的时候，用无数个划分的小矩形的面积来近似面积，但是此时小矩形是来自均匀分布的）。实际上，来自均匀分布的可能性很小，此时需要考虑对复杂分布如何模拟采样。
+
+求解方法：Markov Chain，蒙特卡洛积分，Metroplis-Hasting，Gibbs。
 
 
 % If you have more than one objective, uncomment the below:
@@ -156,7 +157,7 @@ P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_
 %\end{equation}
 %\}
 %\end{enumerate}
-注意实现时取了拉普拉斯平滑，见公式$\big(4\big)$，且为了防止下溢取对概率值取了对数。\cite{nb:py,stanf:cs229}
+注意实现时取了拉普拉斯平滑，见公式$\big(4\big)$，且为了防止下溢取对概率值取了对数。\cite{mcmc:Liu,stanf:cs229}
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
