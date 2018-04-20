@@ -1,14 +1,14 @@
-1. ÑµÁ·¼¯Í¼Ïñ
+ï»¿1. è®­ç»ƒé›†å›¾åƒ
 train-images-idx3-ubyte.gz
 
-2. ÑµÁ·¼¯Àà±ê
+2. è®­ç»ƒé›†ç±»æ ‡
 train-labels-idx1-ubyte.gz
 
-3. ²âÊÔ¼¯Í¼Ïñ
+3. æµ‹è¯•é›†å›¾åƒ
 
 test-images-idx3-ubyte.gz
 
-4. ²âÊÔ¼¯Àà±ê
+4. æµ‹è¯•é›†ç±»æ ‡
 
 test-labels-idx1-ubyte.gz
 
