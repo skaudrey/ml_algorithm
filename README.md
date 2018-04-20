@@ -58,6 +58,8 @@ Some bugs still need to be fixed.
 2.  The file of concept: /sampling/MCMC concept.pdf
 
 # Reference
-1.  李航。统计学习方法
-2.  Andrew Ng. CS229
-3.  Blogs etc. The details are listed in the files of derivation.
+1.  李航. 统计学习方法[M]. 清华大学出版社, 2012.
+2.  Andrew Ng. CS229. Stanford, 2012.
+3.  Raschka S. Python Machine Learning[M]. Packt Publishing, 2014.
+4.  Feifie Li et al. CS231n. Stanford, 2017.
+5.  Blogs etc. The details are listed in the files of derivation.
