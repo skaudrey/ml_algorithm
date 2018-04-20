@@ -101,7 +101,7 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 \theta = \int_{a}^{b}f\left(x\right)\,dx=\int_{a}^{b}\frac{f\left(x\right)}{p\left(x\right)}p\left(x\right)\approx \frac{1}{n}\sum\limits_{i=0}^{n-1}\frac{f\left(x_i\right)}{p\left(x_i\right)}
 \end{equation}
 
-求解思路：微积分思想（recall：学习微积分的时候，用无数个划分的小矩形的面积来近似面积，但是此时小矩形是来自均匀分布的）。实际上，来自均匀分布的可能性很小，此时需要考虑对复杂分布如何模拟采样。
+求解思路：微积分思想（recall：学习微积分的时候，用无数个划分的小矩形的面积来近似面积，但是当时的小矩形是来自均匀分布的）。实际上，来自均匀分布的可能性很小，此时需要考虑对复杂分布如何模拟采样，一旦完成对复杂分布的描述就可以完成数值积分。
 
 求解方法：Markov Chain，蒙特卡洛积分，Metroplis-Hasting，Gibbs。
 
@@ -113,25 +113,20 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 %\item[Second Objective] \hfill \\
 %Objective 2 text
 
-\subsection{推导}
-\label{derivations}
+\subsection{基本概念}
+\label{comceptes}
 \begin{description}
-\item[推导]
-取$I$为示性函数。$a_l$表示$X$的第$l$个特征。样本有n个。类标m个，特征s个。
-\begin{equation}
-P\big(Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)}{n},k=1,2,\cdots,m
-\end{equation}
+\item[马尔可夫矩阵的收敛性]
+可以参考MIT的线性代数课程中对马尔可夫矩阵的讲述。马尔可夫矩阵中各元素大于0且小于1，而且矩阵是对称矩阵。马尔可夫矩阵的特征值中有一个为1，其余都是比1小的正数，所以马尔可夫矩阵的n次幂收敛至一个常数，这也是为什么马尔科夫链一定会收敛，最终可以模拟一个平稳分布的原因。
 
-\begin{equation}
-P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_k\big)}{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)}
-\end{equation}
-其中，$i=1,2,\cdots,n$,$l=1,2,\cdots,s$,$k=1,2,\cdots,m$
-
-\item[改进]
+\item[马尔科夫链的细致平稳条件]
 为了避免分母为0，进行了拉普拉斯平滑，即在分母上加了类数目。
 \begin{equation}
 P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_k\big)+1}{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)+m}
 \end{equation}
+
+\item[多维数据的马尔可夫链的细致平稳条件]
+
 \end{description}
 
 
