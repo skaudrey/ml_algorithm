@@ -65,7 +65,7 @@ class NaiveBayes:
 
         numTrainDocs = len(trainMatrix) # #case_size
         numWords = len(trainMatrix[0])  # #features, which is the length of vocabulary dict theoretically
-        pNeg = sum(trainLabel)/float(numTrainDocs)  # the probability of negative samples
+        pNeg = sum(trainLabel)/float(numTrainDocs)  # the probability of negative samples, which is denoted by 1 with the meaning of spam
 
         p0Num = np.ones(numWords)   # initialize the number of samples as 1 to avoiding the denomitor is zero
         p1Num = np.ones(numWords)   # the same target
@@ -81,7 +81,7 @@ class NaiveBayes:
             else:
                 p0Num += trainMatrix[i]
                 p0InAll += sum(trainMatrix[i])
-        print(p1InAll)
+        print("The number of spam: %d"%p1InAll)
 
         # log for avoiding underflow
         p0Vect = np.log(p0Num/p0InAll)
@@ -99,5 +99,6 @@ class NaiveBayes:
         '''
 
         prob_y0 = sum(vecSample * p0Vec) + np.log(1-pNeg)
+        prob_y1 = sum(vecSample * p0Vec) + np.log(pNeg)
 
 
