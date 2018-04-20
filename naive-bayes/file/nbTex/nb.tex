@@ -128,7 +128,9 @@ P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_
 
 \item[改进]
 为了避免分母为0，进行了拉普拉斯平滑，即在分母上加了类数目。
-
+\begin{equation}
+P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_k\big)+1}{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)+m}
+\end{equation}
 \end{description}
 
 
@@ -138,56 +140,33 @@ P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_
 %----------------------------------------------------------------------------------------
 
 \section{算法实现}
-见CS229\cite{stanf:cs229}
+%见CS229\cite{stanf:cs229}
 %
-\begin{enumerate}[1.]
-\item 随机初始化cluster centroids $\mu_1,\mu_2,\cdots,\mu_k\in\mathbb{R}^n$
-\item 迭代直至收敛\{
-
-对于每一个样例$i$，计算类标
-\begin{equation}
-c^{\left(i\right)}\coloneqq \arg\min\limits_{j}\big\| x^{\left(i\right)}-\mu_{j}\big\|^2
-\end{equation}
-对于每一个类$j$，更新cluster centroids：
-\begin{equation}
-\mu_j \coloneqq \frac{\sum\limits_{i=1}^{m}\mathds{1}\left\{c^{\left(i\right)}=j\right\}x^{\left(i\right)}}{\sum\limits_{i=1}^{m}\mathds{1}\left\{c^{\left(i\right)}=j\right\}}
-\end{equation}
-\}
-\end{enumerate}
-
+%\begin{enumerate}[1.]
+%\item 随机初始化cluster centroids $\mu_1,\mu_2,\cdots,\mu_k\in\mathbb{R}^n$
+%\item 迭代直至收敛\{
+%
+%对于每一个样例$i$，计算类标
+%\begin{equation}
+%c^{\left(i\right)}\coloneqq \arg\min\limits_{j}\big\| x^{\left(i\right)}-\mu_{j}\big\|^2
+%\end{equation}
+%对于每一个类$j$，更新cluster centroids：
+%\begin{equation}
+%\mu_j \coloneqq \frac{\sum\limits_{i=1}^{m}\mathds{1}\left\{c^{\left(i\right)}=j\right\}x^{\left(i\right)}}{\sum\limits_{i=1}^{m}\mathds{1}\left\{c^{\left(i\right)}=j\right\}}
+%\end{equation}
+%\}
+%\end{enumerate}
+注意实现时取了拉普拉斯平滑，见公式$\big(4\big)$，且为了防止下溢取对概率值取了对数。
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
 %
 \section{Implementation}
-聚类测试：数据在data.csv
+聚类测试：训练数据由naivebayes.py中的loadDataSet()生成
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{fig/raw.png} % Include the image placeholder.png
-\caption{训练数据}
-\end{center}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{fig/iter-01.png} % Include the image placeholder.png
-\caption{kmeans运行结果，iter=1，$k$=4。菱形标记聚类中心，点标记数据}
-\end{center}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{fig/iter-02.png} % Include the image placeholder.png
-\caption{kmeans运行结果，iter=2，$k$=4。菱形标记聚类中心，点标记数据}
-\end{center}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{fig/iter-03.png} % Include the image placeholder.png
-\caption{kmeans运行结果，iter=3，$k$=4。菱形标记聚类中心，点标记数据}
+\includegraphics[width=0.8\textwidth]{fig/result.png} % Include the image placeholder.png
+\caption{分类结果}
 \end{center}
 \end{figure}
 
