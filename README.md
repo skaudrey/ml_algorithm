@@ -33,10 +33,24 @@ Some bugs still need to be fixed.
 
 ## Perceptron
 1.  Code: /perceptron/perceptron.py
-2.  The file of derivation: /perceptronfile/percepTex/perceptron.pdf
+2.  The file of derivation: /perceptron/file/percepTex/perceptron.pdf
 3.  Test data: /svm/flowers.csv
 4.  Details: Minimization #(samples which are classified incorrectly),SGD
 5.  Result: /perceptronfile/percepTex/perceptron.pdf
+
+## Naive Bayes
+1.  Code: /naive-bayes/naivebayes.py
+2.  The file of derivation: /naive-bayes/file/nbTex/nb.pdf
+3.  Test data: function loadDataSet in naivebayes.py
+4.  Details: Generative model,Laplace smoothing
+5.  Result: /naive-bayes/file/nbTex/nb.pdf
+
+## ANN
+### LeNet-Keras
+1.  Code: /ANN/LeNet/Lenet-keras.py
+
+### MLP-Numpy
+1.  Code: /ANN/MLP/mlp.py
 
 # Content: Some simulation of basic statistical ideas
 ## Sampling: MCMC
