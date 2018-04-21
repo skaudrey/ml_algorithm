@@ -93,12 +93,12 @@
 %----------------------------------------------------------------------------------------
 
 \section{概述}
-MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。用于采样，数值积分等等。
+MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。用于采样，数值积分等等。蒙特卡洛采样方法的一个重要好处是：估计值的精度与$x$的维度无关，而是与采样次数有关。实际问题中采样二十次左右就能达到较好的精度。
 %To determine the atomic weight of magnesium via its reaction with oxygen and to study the stoichiometry of the reaction (as defined in \ref{definitions}):
 
-求解目标：用多次采样得到的频率分布近似原概率分布。即本来对复杂的$f\left(x\right)$做积分，但是因为$f\left(x\right)$比较复杂所以显式积分困难。迂回方法是构造统计量$\frac{f\left(x\right)}{p\left(x\right)}$，通过对$x\sim p\left(x\right)$进行采样，求取统计量$\frac{f\left(x\right)}{p\left(x\right)}$的期望得到数值积分值。
+求解目标：用多次采样得到的频率分布近似原概率分布。即本来对复杂的$f\left(x\right)$做积分，但是因为$f\left(x\right)$比较复杂所以显式积分困难。迂回方法是构造统计量$\frac{f\left(x\right)}{p\left(x\right)}$，通过对$x\sim p\left(x\right)$进行采样（后文叙述中的目标分布$\pi\left(x\right)$指的就是它），求取统计量$\frac{f\left(x\right)}{p\left(x\right)}$的期望得到数值积分值。
 \begin{equation}
-\theta = \int_{a}^{b}f\left(x\right)\,dx=\int_{a}^{b}\frac{f\left(x\right)}{p\left(x\right)}p\left(x\right)\approx \frac{1}{n}\sum\limits_{i=0}^{n-1}\frac{f\left(x_i\right)}{p\left(x_i\right)}
+\theta = \int_{a}^{b}f\left(x\right)\,dx=\int_{a}^{b}\frac{f\left(x\right)}{p\left(x\right)}p\left(x\right)\,dx\approx \frac{1}{n}\sum\limits_{i=0}^{n-1}\frac{f\left(x_i\right)}{p\left(x_i\right)}
 \end{equation}
 
 求解思路：微积分思想（recall：学习微积分的时候，用无数个划分的小矩形的面积来近似面积，但是当时的小矩形是来自均匀分布的）。实际上，来自均匀分布的可能性很小，此时需要考虑对复杂分布如何模拟采样，一旦完成对复杂分布的描述就可以完成数值积分。
@@ -129,11 +129,31 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 %\item[Second Objective] \hfill \\
 %Objective 2 text
 
-\subsection{基本概念}
+\subsection{基础概念}
+\label{distribution}
+\begin{description}
+\item[提议密度（Proposal Density）]
+记提议密度为$q\left(x\right)$，其需要满足：
+\begin{enumerate}[-]
+\begin{item}
+对$q\left(x\right)$ \emph{采样比较容易}。
+\end{item}
+\begin{item}
+ $q\left(x\right)$的形状接近$\pi \left(x\right)$，具有
+ \begin{equation}
+ \pi \left(x\right) \le  Mq\left(x\right),\forall x
+ \end{equation}
+ 其中$k$为常数。
+\end{item}
+\end{enumerate}
+
+\end{description}
+
+\subsection{马尔科夫链的性质}
 \label{concepts}
 \begin{description}
 \item[马尔可夫矩阵的收敛性]
-可以参考MIT的线性代数课程中对马尔可夫矩阵的讲述。马尔可夫矩阵中各元素大于0且小于1，而且矩阵是对称矩阵。马尔可夫矩阵的特征值中有一个为1，其余都是比1小的正数，所以马尔可夫矩阵的n次幂收敛至一个常数，这也是为什么马尔科夫链一定会收敛，最终可以模拟一个平稳分布的原因。
+可以参考MIT的线性代数课程中对马尔可夫矩阵的讲述。马尔可夫矩阵中各元素大于0且小于1，而且矩阵是对称矩阵。马尔可夫矩阵的特征值中有一个为1，其余都是比1小的正数，所以马尔可夫矩阵的n次幂收敛至一个常数，这也是为什么马尔科夫链一定会收敛，最终可以模拟一个平稳分布的原因。而且，每个马尔科夫链对应的稳定分布是唯一的。（唯一性证明请自行百度，尚未查阅这方面的资料）
 
 \item[马尔科夫链的细致平稳条件]
 如果非周期马尔科夫链的状态转移矩阵$P$和概率分布$\pi\left(x\right)$对于所有的$i,j$满足
@@ -148,22 +168,53 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 \begin{equation}
 \pi\left(E\right)P\left(E\to F\right)=\pi\left(F\right)P\left(F\to E\right)
 \end{equation}
-取上一状态的条件概率分布即可作为马尔科夫链的状态转移概率。
+取上一状态的条件概率分布即可作为马尔科夫链的状态转移概率。固定$n-1$维，只改变一维。这样按坐标轴轮换完成整个特征维的状态转移后，算完成一次。
+
+\end{description}
+
+
+
+
+\subsection{采样方法}
+\label{sampling}
+\begin{description}
 
 \item[接受——拒绝采样]
+可以参考Metropolis接受准则，核心思想是当能量增加时以一定概率接收，而不是一味的拒绝。
 
-当公式$\left(1\right)$中的$p\left(x\right)$不是常见分布时，无法根据$p\left(x\right)$对$x$直接进行采样。此时接受——拒绝采样可以完成对$x$的模拟采样。选定提议分布$q\left(x\right)$，如高斯分布等。先根据提议分布$q\left(x\right)$采样得到一个样本$x_0$，其对应的实际的概率是$u_0$。再从均匀分布$\left(0,kq\left(x_0\right)\right)$中采样得到一值$u$，若$u<u_0$，接受这次采样值$x_0$，反之拒绝。其中,$k,q\left(x\right)$的选取要确保$kq\left(x\right)\ge p\left(x\right)$。当然，要满足这个条件比较困难，MCMC中Metropolis-Hastings方法解决了这个问题。
+当公式$\left(1\right)$中的$p\left(x\right)$不是常见分布时，无法根据$p\left(x\right)$对$x$直接进行采样。此时接受——拒绝采样可以完成对$x$的模拟采样。
 
+选定提议分布$q\left(x\right)$，如高斯分布等。先根据提议分布$q\left(x\right)$采样得到一个样本$x_0$，其对应的实际的概率是$u_0$。再从均匀分布$\left(0,kq\left(x_0\right)\right)$中采样得到一值$u$，若$u<u_0$，接受这次采样值$x_0$，反之拒绝。其中,$k,q\left(x\right)$的选取要确保$kq\left(x\right)\ge p\left(x\right)$。当然，要满足这个条件比较困难，MCMC中Metropolis-Hastings方法将解决这个问题。
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/kq(x)--x.jpg} % Include the image placeholder.png
+\caption{接受拒绝采样}
+\end{center}
+\end{figure}
+
+\item[重要性采样]
+\emph{接受——拒绝采样与重要性采样都要求提议分布近似于原分布时才会有好的采样结果。}
 
 \item[马尔科夫链采样]
+选定平稳分布$\pi \left(x\right)$的状态转移矩阵$P$之后，根据状态转移矩阵$P$，不断完成上一状态到下一状态的转移得到此时的条件概率，利用此时的条件概率得到采样值，重复这个转移过程直至条件概率收敛。收敛之后的采样集可以作为采样结果输出用于蒙特卡洛模拟求和。
 
-\item[MCMC采样——MH采样]
+\item[MCMC采样——Metropolis采样]
+接受——拒绝原理是相同的，与MH采样方法不同的转移矩阵$Q$是对称矩阵，即由上一状态转移到当前状态和由当前状态转移到上一状态的概率是相等的。
+不同于简单的接受——拒绝采样比较采样自常见的提议分布得到的$x_0$所对应的$p\left(x_0\right)$与采样自均匀分布$\left(0,kp\left(x_0\right)\right)$的大小决定是否接受采样，这里引入了接受率$\alpha\left(i,j\right)$，表示由状态$i$转移到状态$j$的接受率。通过比较采样自均匀分布$\left(0,1\right)$的值u与接受率$\alpha\left(i,j\right)$，决定是否接受转移。
+\begin{equation}
+\alpha = \min\left(1,\frac{\pi\left(j\right)}{\pi\left(i\right)}\right)
+\end{equation}
+
+\item[MCMC采样——Metropolis-Hastings采样]
+接受——拒绝原理是相同的，但是这里的提议分布是根据马尔科夫链采样得到的。
 
 \item[MCMC采样——Gibbs采样]
 
 
 
 \end{description}
+
 
 
 

@@ -3,14 +3,16 @@
 # @Time    : 2018/4/4 19:21
 # @Author  : MiaFeng
 # @Site    : 
-# @File    : MetropolisHastings.py
+# @File    : Metropolis.py
 # @Software: PyCharm
 __author__ = 'MiaFeng'
 
 '''
-Simulate the Metropolis-Hastings sampling 
+Simulate the Metropolis sampling 
 
 The target distribution is a norm distribution with mean three and covariance 2
+
+Metropolis-Hastings is differed from the Metropolis method by the matrix Q, which is anti-symmetric
 '''
 
 
