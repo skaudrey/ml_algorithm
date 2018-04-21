@@ -52,10 +52,13 @@ Some bugs still need to be fixed.
 ### MLP-Numpy
 1.  Code: /ANN/MLP/mlp.py
 
-# Content: Some simulation of basic statistical ideas
+# Content: Some simulations of basic statistical ideas
 ## Sampling: MCMC
-1.  Code: /sampling/MetropolisHastings.py, /sampling/Gibbs.py
-2.  The file of concept: /sampling/MCMC concept.pdf
+1.  Code: /sampling/Metropolis.py, /sampling/Gibbs.py
+2.  The file of concept: /sampling/file/samplingTex/mcmc.pdf
+3.  Test data: one dimension Gaussian distribution in Metropolis.py and two-dimensional Gaussian distribution in Gibbs.py
+4.  Details: MCMC, Markov chain.
+5.  Result: /sampling/file/samplingTex/mcmc.pdf
 
 # Reference
 1.  李航. 统计学习方法[M]. 清华大学出版社, 2012.

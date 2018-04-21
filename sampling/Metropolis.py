@@ -8,9 +8,7 @@
 __author__ = 'MiaFeng'
 
 '''
-Simulate the Metropolis sampling 
-
-The target distribution is a norm distribution with mean three and covariance 2
+Metropolis sampling for simulate a one dimensional Gaussian distribution with mean three and covariance two.
 
 Metropolis-Hastings is differed from the Metropolis method by the matrix Q, which is anti-symmetric
 '''
@@ -31,16 +29,18 @@ def norm_dist_prob(theta):
 
 if __name__=="__main__":
     sns.set()
-    T = 5000
+    T = 5000    # the numbers of points that need to be sampled
     pi = [ 0 for i in range(T)]
-    sigma = 1   # start from standard norm distribution
+    sigma = 1   # start from standard Gaussian distribution
     t = 0
 
     # the status transformation matrix Q is omitted here cause it is taken as the symmetric matrix
     # matrix Q is the proposal density?? proposal distribution is for accepting-rejecting samplings
     while t < T-1:
         t = t+1
-        pi_star = norm.rvs(loc=pi[t-1], scale = sigma, size = 1 ,random_state=None) # sample one with the gaussian distribution with mean loc and variance scale
+        pi_star = norm.rvs(loc=pi[t-1], scale = sigma, size = 1 ,random_state=None)
+        # sampling one point, return an array
+        # sample one with the gaussian distribution with mean loc and variance scale
         alpha = min(1,(norm_dist_prob(pi_star[0])/norm_dist_prob(pi[t-1])))
 
         u = random.uniform(0,1)
@@ -57,5 +57,3 @@ if __name__=="__main__":
     plt.hist(pi, num_bins,normed = 1, facecolor ='red',alpha=0.7)   # normed is set true for probability
     # 采样数据集的频率分布直方图，可以看到还是很接近概率密度值的
     plt.show()
-
-import pickle
