@@ -184,7 +184,39 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 
 当公式$\left(1\right)$中的$p\left(x\right)$不是常见分布时，无法根据$p\left(x\right)$对$x$直接进行采样。此时接受——拒绝采样可以完成对$x$的模拟采样。
 
-选定提议分布$q\left(x\right)$，如高斯分布等。先根据提议分布$q\left(x\right)$采样得到一个样本$x_0$，其对应的实际的概率是$u_0$。再从均匀分布$\left(0,kq\left(x_0\right)\right)$中采样得到一值$u$，若$u<u_0$，接受这次采样值$x_0$，反之拒绝。其中,$k,q\left(x\right)$的选取要确保$kq\left(x\right)\ge p\left(x\right)$。当然，要满足这个条件比较困难，MCMC中Metropolis-Hastings方法将解决这个问题。
+选定提议密度$q\left(x\right)$，如高斯分布、均匀分布等。先根据提议分布$q\left(x\right)$采样得到一个样本$x_0$，其对应的实际的概率是$u_0$。再从均匀分布$\left(0,kq\left(x_0\right)\right)$中采样得到一值$u$，若$u<u_0$，接受这次采样值$x_0$，反之拒绝。
+步骤为：
+\begin{enumerate}[-]
+\begin{item}
+产生样本$x_0\sim q\left(x\right)$以及$u  \sim Uniform\left(0,kq\left(x_0\right)\right)$。
+\end{item}
+\begin{item}
+ 若$u\le p\left(x_0\right)$，则接受$x_0$，反之拒绝。
+\end{item}
+\end{enumerate}
+
+
+注：为与MCMC中的接受率叙述保持一致，这里对接受拒绝准则重述如下：
+
+
+步骤为：
+\begin{enumerate}[-]
+\item
+产生样本$x_0\sim q\left(x\right)$以及$u  \sim Uniform\left(0,1\right)$。
+
+\item
+ 若$u\le \frac{p\left(x_0\right)}{kq\left(x_0\right)}$，则接受$x_0$，反之拒绝。
+
+\end{enumerate}
+其中，接受率$\alpha=\frac{p\left(x_0\right)}{kq\left(x_0\right)}$，是图3中红色曲线的面积与蓝色曲线的面积的比值。其理论值为
+\begin{equation}
+\alpha^* = \frac{\int_a^b p\left(x\right) \,dx}{k\int_a^b q\left(x\right) \,dx}=\frac{1}{k}
+\end{equation}
+
+当然，$k,q\left(x\right)$的选取要满足提议密度的性质：$kq\left(x\right)\ge p\left(x\right)$。但是满足这个条件比较困难，MCMC中Metropolis-Hastings方法将解决这个问题。
+
+而且，高维空间的$k$将非常大，计算所得的接受率极小，相应的拒绝率会非常高，这导致了采样效率不高\cite{mcmc:Xu}。
+
 
 \begin{figure}[H]
 \begin{center}
@@ -194,20 +226,55 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 \end{figure}
 
 \item[重要性采样]
-\emph{接受——拒绝采样与重要性采样都要求提议分布近似于原分布时才会有好的采样结果。}
+为了提升简单接受——拒绝采样方法的采样效率。无需严格满足$p\left(x\right)\le kq\left(x\right)$。
+\begin{equation}
+\theta = \int_{a}^{b}f\left(x\right)\,dx=\int_{a}^{b}\frac{f\left(x\right)}{p\left(x\right)}\frac{p\left(x\right)} {q\left(x\right)}q\left(x\right)  \,dx
+\end{equation}
+重要性$w$记为：
+\begin{equation}
+w=\frac{p\left(x\right)} {q\left(x\right)}
+\end{equation}
+其余的定义不变。
+
+
+则原数值积分值$\theta$的近似计算步骤为：
+\begin{enumerate}[-]
+\item
+产生样本$x_1,\cdots, x_n \sim q\left(x\right)$。
+
+\item
+计算对积分值$\theta$的无偏估计为
+\begin{equation}
+\hat{I}=\frac{1}{n}\sum\limits_{i=1}^{n}\frac{f\left(x_i\right)}{p\left(x_i\right)}w\left(x_i\right)
+\end{equation}
+其中$w\left(x_i\right)=\frac{p\left(x_i\right)} {q\left(x_i\right)}$
+实际中常用有偏估计来近似积分值$\theta$，公式为：
+\begin{equation}
+\hat{I}=\frac{\sum\limits_{i=1}^{n}\frac{f\left(x_i\right)}{p\left(x_i\right)}w\left(x_i\right)}{\sum\limits_{i=1}^{n}w\left(x_i\right)}
+\end{equation}
+\end{enumerate}
+与接受——拒绝采样中类似，这里的提议密度$q\left(x\right)$也是任意的。只是当$q\left(x\right)$与$p\left(x\right)$更接近，并且 $q\left(x\right)$尾部较厚的时候方差更小（更近均匀分布），提议密度的采样效率更高。（这里\emph{不再需要满足}$p\left(x\right)\le kq\left(x\right)$） 。
+当然，只有当$q\left(x\right)$与$p\left(x\right)$更接近时，$w\left(x\right)$的取值范围会更小一些，否则其取值范围还是很大，还是没法完成对任意分布的近似。
+
 
 \item[马尔科夫链采样]
 选定平稳分布$\pi \left(x\right)$的状态转移矩阵$P$之后，根据状态转移矩阵$P$，不断完成上一状态到下一状态的转移得到此时的条件概率，利用此时的条件概率得到采样值，重复这个转移过程直至条件概率收敛。收敛之后的采样集可以作为采样结果输出用于蒙特卡洛模拟求和。
+设计不同的马尔科夫状态转移矩阵$P$（下文中记为$Q$），就得到了下述几种不同的采样方法。
 
 \item[MCMC采样——Metropolis采样]
-接受——拒绝原理是相同的，与MH采样方法不同的转移矩阵$Q$是对称矩阵，即由上一状态转移到当前状态和由当前状态转移到上一状态的概率是相等的。
-不同于简单的接受——拒绝采样比较采样自常见的提议分布得到的$x_0$所对应的$p\left(x_0\right)$与采样自均匀分布$\left(0,kp\left(x_0\right)\right)$的大小决定是否接受采样，这里引入了接受率$\alpha\left(i,j\right)$，表示由状态$i$转移到状态$j$的接受率。通过比较采样自均匀分布$\left(0,1\right)$的值u与接受率$\alpha\left(i,j\right)$，决定是否接受转移。
+接受——拒绝原理是相同的，与MH采样方法不同在Metropolis的转移矩阵$Q$是对称矩阵，即由上一状态转移到当前状态和由当前状态转移到上一状态的概率是相等的。
+
+通过比较采样自均匀分布$\left(0,1\right)$的值u与接受率$\alpha\left(i,j\right)$，决定是否接受转移。
+
+因为采用马尔科夫链，这里的接受率定义为：
 \begin{equation}
 \alpha = \min\left(1,\frac{\pi\left(j\right)}{\pi\left(i\right)}\right)
 \end{equation}
 
 \item[MCMC采样——Metropolis-Hastings采样]
-接受——拒绝原理是相同的，但是这里的提议分布是根据马尔科夫链采样得到的。
+接受——拒绝原理是相同的，但是这里的提议分布是根据马尔科夫链状态转移后得到的。状态转移矩阵$Q$是非对称矩阵。
+
+
 
 \item[MCMC采样——Gibbs采样]
 
@@ -239,7 +306,7 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 %\end{equation}
 %\}
 %\end{enumerate}
-注意实现时取了拉普拉斯平滑，见公式$\big(4\big)$，且为了防止下溢取对概率值取了对数。\cite{mcmc:Liu,stanf:cs229}
+注意实现时取了拉普拉斯平滑，见公式$\big(4\big)$，且为了防止下溢取对概率值取了对数。\cite{mcmc:Liu}
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
