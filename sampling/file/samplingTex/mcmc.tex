@@ -271,13 +271,25 @@ w=\frac{p\left(x\right)} {q\left(x\right)}
 \alpha = \min\left(1,\frac{\pi\left(j\right)}{\pi\left(i\right)}\right)
 \end{equation}
 
-\item[MCMC采样——Metropolis-Hastings采样]
-接受——拒绝原理是相同的，但是这里的提议分布是根据马尔科夫链状态转移后得到的。状态转移矩阵$Q$是非对称矩阵。
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/mc-trans.png} % Include the image placeholder.png
+\caption{马氏链转移和接受概率}
+\end{center}
+\end{figure}
 
+
+
+\item[MCMC采样——Metropolis-Hastings采样]
+接受——拒绝原理是相同的，但是这里的提议分布是根据马尔科夫链状态转移后得到的。状态转移矩阵$Q$是非对称矩阵。Metropolis采样可以看做Metropolis-Hastings采样的一个特例。
+接受率定义为：
+\begin{equation}
+\alpha = \min\left(1,\frac{\pi\left(j\right)Q\left(j,i\right)}{\pi\left(i\right)Q\left(i,j\right)}\right)
+\end{equation}
 
 
 \item[MCMC采样——Gibbs采样]
-
+与马尔可夫随机场模型比较接近。\text{\color{red}{待补充}}。
 
 
 \end{description}
