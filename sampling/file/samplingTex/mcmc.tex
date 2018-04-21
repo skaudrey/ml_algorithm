@@ -103,7 +103,23 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 
 求解思路：微积分思想（recall：学习微积分的时候，用无数个划分的小矩形的面积来近似面积，但是当时的小矩形是来自均匀分布的）。实际上，来自均匀分布的可能性很小，此时需要考虑对复杂分布如何模拟采样，一旦完成对复杂分布的描述就可以完成数值积分。
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/integration.png} % Include the image placeholder.png
+\caption{矩形近似}
+\end{center}
+\end{figure}
+
+
 求解方法：Markov Chain，蒙特卡洛积分，Metroplis-Hasting，Gibbs。
+
+思维导图：详见MCMC.xmind
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/Sampling.png} % Include the image placeholder.png
+\caption{思维导图}
+\end{center}
+\end{figure}
 
 
 % If you have more than one objective, uncomment the below:
@@ -114,18 +130,38 @@ MCMC：粗暴的采样模拟方式，用于模拟直接计算困难的分布。�
 %Objective 2 text
 
 \subsection{基本概念}
-\label{comceptes}
+\label{concepts}
 \begin{description}
 \item[马尔可夫矩阵的收敛性]
 可以参考MIT的线性代数课程中对马尔可夫矩阵的讲述。马尔可夫矩阵中各元素大于0且小于1，而且矩阵是对称矩阵。马尔可夫矩阵的特征值中有一个为1，其余都是比1小的正数，所以马尔可夫矩阵的n次幂收敛至一个常数，这也是为什么马尔科夫链一定会收敛，最终可以模拟一个平稳分布的原因。
 
 \item[马尔科夫链的细致平稳条件]
-为了避免分母为0，进行了拉普拉斯平滑，即在分母上加了类数目。
+如果非周期马尔科夫链的状态转移矩阵$P$和概率分布$\pi\left(x\right)$对于所有的$i,j$满足
 \begin{equation}
-P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_k\big)+1}{\sum\limits_{i=1}^{n}I\big(y_i=c_k\big)+m}
+\pi\left(i\right)P\left(i,j\right)=\pi\left(j\right)P\left(j,i\right)
 \end{equation}
+则称概率分布$\pi\left(x\right)$是状态转移矩阵$P$的平稳分布。所以，利用对应的状态转移矩阵$P$，就可以模拟平稳复杂分布$\pi$。但是对于任意的平稳分布$\pi$，$P$的构造比较困难。MCMC采用迂回的方式解决了这个问题。
 
 \item[多维数据的马尔可夫链的细致平稳条件]
+
+平面上任意两点$E,F$，满足细致平稳条件
+\begin{equation}
+\pi\left(E\right)P\left(E\to F\right)=\pi\left(F\right)P\left(F\to E\right)
+\end{equation}
+取上一状态的条件概率分布即可作为马尔科夫链的状态转移概率。
+
+\item[接受——拒绝采样]
+
+当公式$\left(1\right)$中的$p\left(x\right)$不是常见分布时，无法根据$p\left(x\right)$对$x$直接进行采样。此时接受——拒绝采样可以完成对$x$的模拟采样。选定提议分布$q\left(x\right)$，如高斯分布等。先根据提议分布$q\left(x\right)$采样得到一个样本$x_0$，其对应的实际的概率是$u_0$。再从均匀分布$\left(0,kq\left(x_0\right)\right)$中采样得到一值$u$，若$u<u_0$，接受这次采样值$x_0$，反之拒绝。其中,$k,q\left(x\right)$的选取要确保$kq\left(x\right)\ge p\left(x\right)$。当然，要满足这个条件比较困难，MCMC中Metropolis-Hastings方法解决了这个问题。
+
+
+\item[马尔科夫链采样]
+
+\item[MCMC采样——MH采样]
+
+\item[MCMC采样——Gibbs采样]
+
+
 
 \end{description}
 
@@ -158,13 +194,13 @@ P\big(X_j=a_{jl}|Y=c_k\big)=\frac{\sum\limits_{i=1}^{n}I\big(x_i^j=a_{jl},y_i=c_
 %----------------------------------------------------------------------------------------
 %
 \section{Implementation}
-MCMC
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{fig/Sampling.png} % Include the image placeholder.png
-\caption{MCMC思维导图}
-\end{center}
-\end{figure}
+%MCMC
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=0.8\textwidth]{fig/Sampling.png} % Include the image placeholder.png
+%\caption{MCMC思维导图}
+%\end{center}
+%\end{figure}
 
 %%----------------------------------------------------------------------------------------
 %%	SECTION 4

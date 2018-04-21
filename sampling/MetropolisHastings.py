@@ -35,6 +35,7 @@ if __name__=="__main__":
     t = 0
 
     # the status transformation matrix Q is omitted here cause it is taken as the symmetric matrix
+    # matrix Q is the proposal density?? proposal distribution is for accepting-rejecting samplings
     while t < T-1:
         t = t+1
         pi_star = norm.rvs(loc=pi[t-1], scale = sigma, size = 1 ,random_state=None) # sample one with the gaussian distribution with mean loc and variance scale
