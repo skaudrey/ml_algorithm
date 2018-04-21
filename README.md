@@ -62,4 +62,4 @@ Some bugs still need to be fixed.
 2.  Andrew Ng. CS229. Stanford, 2012.
 3.  Raschka S. Python Machine Learning[M]. Packt Publishing, 2014.
 4.  Feifie Li et al. CS231n. Stanford, 2017.
-5.  Blogs etc. The details are listed in the files of derivation.
+5.  Blogs etc. The details of which are listed in the derivation files of each packages.
