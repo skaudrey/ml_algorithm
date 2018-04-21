@@ -35,6 +35,8 @@
 
 %\usepackage{times} % Uncomment to use the Times New Roman font
 
+\usepackage{color}
+
 %==========pesusdo codes
 \usepackage[linesnumbered,boxed]{algorithm2e}
 %\renewcommand{\algorithmcfname}{算法}
@@ -289,7 +291,15 @@ w=\frac{p\left(x\right)} {q\left(x\right)}
 
 
 \item[MCMC采样——Gibbs采样]
-与马尔可夫随机场模型比较接近。\text{\color{red}{待补充}}。
+与马尔可夫随机场模型比较接近{\color{red}{为什么待补充}}。
+无需计算接受率，所以采样效率提升。无需寻找合适的提议密度。
+适用于高维特征下的采样。具体步骤如下：
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{fig/gibbs.jpg} % Include the image placeholder.png
+\caption{Gibbs采样步骤}
+\end{center}
+\end{figure}
 
 
 \end{description}
@@ -302,28 +312,45 @@ w=\frac{p\left(x\right)} {q\left(x\right)}
 %----------------------------------------------------------------------------------------
 
 \section{算法实现}
-%见CS229\cite{stanf:cs229}
-%
-%\begin{enumerate}[1.]
-%\item 随机初始化cluster centroids $\mu_1,\mu_2,\cdots,\mu_k\in\mathbb{R}^n$
-%\item 迭代直至收敛\{
-%
-%对于每一个样例$i$，计算类标
-%\begin{equation}
-%c^{\left(i\right)}\coloneqq \arg\min\limits_{j}\big\| x^{\left(i\right)}-\mu_{j}\big\|^2
-%\end{equation}
-%对于每一个类$j$，更新cluster centroids：
-%\begin{equation}
-%\mu_j \coloneqq \frac{\sum\limits_{i=1}^{m}\mathds{1}\left\{c^{\left(i\right)}=j\right\}x^{\left(i\right)}}{\sum\limits_{i=1}^{m}\mathds{1}\left\{c^{\left(i\right)}=j\right\}}
-%\end{equation}
-%\}
-%\end{enumerate}
-注意实现时取了拉普拉斯平滑，见公式$\big(4\big)$，且为了防止下溢取对概率值取了对数。\cite{mcmc:Liu}
+\subsection{验证马尔科夫链的稳定性}
+代码：SteadyMarkovTranforMatrix
+
+\subsection{Metropolis采样}
+原文中说的是代码实现的是MH采样\cite{mcmc:Liu}，但根据Metropolis算法和MH算法的区别（转移矩阵$Q$是否对称，我认为其代码实际实现的是Metropolis算法）
+代码：Metropolis.py
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{fig/M-H.png} % Include the image placeholder.png
+\caption{Metropolis采样分布直方图}
+\end{center}
+\end{figure}
+
+\subsection{二维Gibbs采样}
+代码：Gibbs.py
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{fig/gibbs_twodimen_density.png} % Include the image placeholder.png
+\caption{二维分布散点图}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\textwidth]{fig/gibbs_hist.png} % Include the image placeholder.png
+\caption{Gibbs采样分布直方图}
+\end{center}
+\end{figure}
+
+
 %----------------------------------------------------------------------------------------
 %	SECTION 3
 %----------------------------------------------------------------------------------------
 %
-\section{Implementation}
+%\section{Implementation}
 %MCMC
 %\begin{figure}[H]
 %\begin{center}
