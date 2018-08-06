@@ -52,3 +52,10 @@ def plot_decision_regions(X,y,classifier,basepath,fileName,resolution = 0.02):
 
     plt.savefig(basepath+fileName)
     plt.show()
+
+
+def plotImg(df,xlabel=None,ylabel=None,title=None,kind='bar'):
+    sns.set()
+
+    df.plot(kind=kind, title=title)
+    plt.ylabel(ylabel)
