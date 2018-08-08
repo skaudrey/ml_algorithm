@@ -1,14 +1,12 @@
-# encoding: utf-8
 #!/usr/bin/env python
-'''
-@Author: Mia
-@Contact: fengmiao@163.com
-@Software: PyCharm
-@Site    : 
-@Time    : 2018/7/31 下午4:45
-@File    : preprocessUtil.py
-@Theme   :
-'''
+# -*- coding: utf-8 -*-
+# @Time    : 2018/7/31 16:45
+# @Author  : MiaFeng
+# @Contact : skaudrey@163.com
+# @Site    :
+# @File    : preprocessUtil.py
+# @Software: PyCharm
+__author__ = 'MiaFeng'
 
 from sklearn.preprocessing.imputation import Imputer
 from sklearn.feature_selection import f_regression

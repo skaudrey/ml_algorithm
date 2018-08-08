@@ -1,18 +1,17 @@
-# encoding: utf-8
 #!/usr/bin/env python
-'''
-@Author: Mia
-@Contact: fengmiao@meituan.com
-@Software: PyCharm
-@Site    : 
-@Time    : 2018/7/31 下午9:27
-@File    : xgboostFineTuning.py
-@Theme   :
-'''
+# -*- coding: utf-8 -*-
+# @Time    : 2018/7/31 21:27
+# @Author  : MiaFeng
+# @Contact : skaudrey@163.com
+# @Site    :
+# @File    : xgboostFineTuning.py
+# @Software: PyCharm
+__author__ = 'MiaFeng'
 
-from sklearn import datasets
+from sklearn.datasets import load_diabetes
 
 def loadData():
-    diabetes = datasets.load_diabetes()
-    X ,y = diabetes.data, diabetes.target
+    X ,y = load_diabetes().data, load_diabetes().target
+
+
 
