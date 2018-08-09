@@ -10,7 +10,13 @@ __author__ = 'MiaFeng'
 
 from sklearn.preprocessing.imputation import Imputer
 from sklearn.feature_selection import f_regression
+import pandas as pd
 
+
+FILL_DICT = {
+    'miss1':0,
+    'miss2':1
+}
 
 def fillMissing(df):
     df = df.fillna(FILL_DICT)
@@ -174,3 +180,43 @@ def dropFeatures(df,colNameStrList):
     new_df = df.drop(colNameStrList,axis=1)  # Attention!! Have to return the new df
     print new_df.shape
     return new_df
+
+def timeSeriesRoll(df,interval = '5T'):
+    '''
+    :param df:
+    :param interval: 'T' for minutes, 'M' for months, 'D' for days
+    :return:
+    '''
+
+    df_time = df[['userid', 'currenttime', 'outmoney', 'orderid']]
+
+    result = pd.DataFrame()
+
+    for name, group in df_time.groupby(['userid']):
+        # print name
+
+        cout_group = group[['currenttime', 'outmoney']]
+
+        # # Caution: The resample function only works in the data indexed with datetimedelta or sth. like it.
+
+        cout_group.set_index('currenttime', inplace=True)
+
+        tmpResult = cout_group.rolling(interval).agg(['count', 'sum', 'max', 'mean'])
+
+
+        concatTmp = pd.DataFrame({
+            'factor_user_outmoney_cnt_%s'%interval: tmpResult['outmoney']['count'].values,
+            'factor_user_outmoney_sum_%s'%interval: tmpResult['outmoney']['sum'].values,
+            'factor_user_outmoney_max_%s'%interval: tmpResult['outmoney']['max'].values,
+            'factor_user_outmoney_min_%s'%interval: tmpResult['outmoney']['mean'].values
+        })
+
+        result = pd.concat([result, concatTmp], ignore_index=True)
+
+        # for idx in xrange(len(tmpMonth)):
+        #     print "userid [%s] -- month [%d] -- total charge money -- %.2f" % (
+        #         name, tmpMonth[idx], result['outmoney']['sum'][idx])
+
+    df = pd.concat([df,result],axis=1)
+
+    return df

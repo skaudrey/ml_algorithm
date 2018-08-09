@@ -10,6 +10,7 @@ __author__ = 'MiaFeng'
 
 import numpy as np
 import itertools
+from sklearn.datasets import load_iris
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
