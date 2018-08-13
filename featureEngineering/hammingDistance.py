@@ -13,6 +13,10 @@ import jieba.analyse
 import numpy as np
 import json
 
+'''
+You are allowed to compare the similarity of two documents by get the key words' TF-IDF.
+'''
+
 
 class simhash:
     def __init__(self, content):

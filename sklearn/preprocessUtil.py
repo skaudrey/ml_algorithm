@@ -11,6 +11,10 @@ __author__ = 'MiaFeng'
 from sklearn.preprocessing.imputation import Imputer
 from sklearn.feature_selection import f_regression
 import pandas as pd
+from sklearn.cluster import KMeans
+# import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+
 
 
 FILL_DICT = {
@@ -220,3 +224,96 @@ def timeSeriesRoll(df,interval = '5T'):
     df = pd.concat([df,result],axis=1)
 
     return df
+
+def cocurrenceMatrix(df,onehotMap,target):
+    '''
+    Counting the cocurrence matrix of DataFrame
+    :param df:  Raw DataFrame
+    :param onehotMap:The mapping matrix for discrete variable
+    :param target: The interesting feature names, which is the columns of DataFrame df
+    :return:
+    '''
+    df_cnt = df[target]
+
+    matrixItm = {}
+
+    for iA, iB in zip(df_cnt[target[0]], df_cnt[target[1]]):
+        # print iA, iB
+        keys = {}
+        key1 = '%s_%s'%(iA,iB)
+        key2 = '%s_%s' % (iB, iA)
+
+        keys[key1] = matrixItm.get(key1)==None
+        keys[key2] = matrixItm.get(key2) == None
+        tmp = 0
+        if(keys[key1] or keys[key2]):
+            if(keys[key1]):
+                tmp = keys[key1] + 1
+                matrixItm[key1] = tmp
+            else:
+                tmp = keys[key2] + 1
+                matrixItm[key2] = tmp
+        else:
+            matrixItm[key1] = 1
+
+    cnt = pd.DataFrame(data=matrixItm.values(), index=matrixItm.keys(), columns=['cnt'])
+
+    return cnt
+
+
+def clusterDf(df,K,target,extra=None):
+    df_clust = (df[[target,extra,'label']].values)
+    print df_clust.shape
+    kmeans = KMeans(n_clusters=K, random_state=0).fit(df_clust)
+
+    df_result = []
+
+    for k in xrange(K):
+        df_result.append([[],[],[]])
+
+    for idx,i in enumerate(kmeans.labels_):
+        df_result[i][0].append(df_clust[idx][0])
+        df_result[i][1].append(df_clust[idx][1])
+        if df_clust[idx][2]!=None:
+            df_result[i][2].append(df_clust[idx][2])
+
+    # show result and save
+    fig = plt.figure(figsize=(8, 8))
+    Color = 'rbgyckm'
+
+    if df_clust.shape[0]>2:
+        ax = fig.add_subplot(111, projection='3d')
+        # plot clusters' centroids
+        ax.scatter(kmeans.cluster_centers_[:, 0],
+                   kmeans.cluster_centers_[:, 1],
+                   kmeans.cluster_centers_[:, 2],
+                   color=Color[0])
+        # plot clusters, z denotes the positive and negative labels
+        for i in range(K):
+            mydata = df_result[i]
+            print len(mydata)
+            ax.scatter(mydata[0], mydata[1],mydata[2], color=Color[i + 1])
+
+        ax.set_xlabel(target)
+        ax.set_ylabel(extra)
+        ax.set_zlabel('pos-neg label')
+
+    else:
+        ax = fig.add_subplot(111)
+        # plot clusters' centroids
+        ax.scatter(kmeans.cluster_centers_[:, 0],
+                   kmeans.cluster_centers_[:, 1],
+                   color=Color[0])
+        # plot clusters, y denotes the positive and negative labels
+        for i in range(K):
+            mydata = df_result[i]
+            print len(mydata)
+            ax.scatter(mydata[0], mydata[1], color=Color[i + 1])
+        ax.xlabel(target)
+        ax.ylabel('pos-neg label')
+
+    plt.title('%s-%s' % (target, extra))
+    plt.savefig('%s%s-%s.png', dpi=500)
+    plt.show()
+
+    return kmeans.labels_,kmeans
