@@ -52,7 +52,7 @@ Some bugs still need to be fixed.
 ### MLP-Numpy
 1.  Code: /ANN/MLP/mlp.py
 
-# Content: Some simulations of basic statistical ideas
+# Content: Simulink of basic statistical ideas
 ## Sampling: MCMC
 1.  Code: /sampling/Metropolis.py, /sampling/Gibbs.py
 2.  The file of concept: /sampling/file/samplingTex/mcmc.pdf
